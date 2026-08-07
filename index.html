@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Junehyuk Boo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=Roboto:wght@400;450;500;700&display=swap');
+
+    :root {
+      --font-body: 'Inter', sans-serif;
+      --font-header: 'Inter', sans-serif;
+    }
+    /*
+    :root {
+      --font-body: 'Roboto', sans-serif;
+      --font-header: 'Roboto', sans-serif;
+    }
+    */
+
+    /* CSS Variables for Light/Dark Mode Support */
+    :root {
+      --bg-color: #fafafa;
+      --text-main: #111111;
+      --text-muted: #606060;
+      --link-color: #0366d6;
+      --link-hover: #0056b3;
+      --nav-bg: rgba(220, 230, 250, 0.9);
+      --border-color: #cccccc;
+      --badge-arch-bg: #e0f2fe; --badge-arch-text: #0284c7;
+      --badge-sys-bg: #f3e8ff;  --badge-sys-text: #9333ea;
+      --badge-storage-bg: #dbeafe; --badge-storage-text: #2563eb;
+      --badge-network-bg: #dcfce7; --badge-network-text: #16a34a;
+      --badge-sec-bg: #fae8ff; --badge-sec-text: #c026d3;
+      --badge-virt-bg: #ffedd5; --badge-virt-text: #ea580c;
+      --badge-gpu-bg: #ecfccb; --badge-gpu-text: #65a30d;
+      --badge-fpga-bg: #ffe4e6; --badge-fpga-text: #e11d48;
+      --code-bg: #f0f0f0;
+    }
+
+    body.dark-mode {
+      --bg-color: #242830;
+      --text-main: #e0e0e0;
+      --text-muted: #a0a0a0;
+      --link-color: #58a6ff;
+      --link-hover: #79c0ff;
+      --nav-bg: rgba(13, 17, 23, 0.9);
+      --border-color: #444444;
+      --badge-arch-bg: #0c2d48; --badge-arch-text: #38bdf8;
+      --badge-sys-bg: #2e1065;  --badge-sys-text: #d8b4fe;
+      --badge-storage-bg: #1e3a8a; --badge-storage-text: #93c5fd;
+      --badge-network-bg: #14532d; --badge-network-text: #86efac;
+      --badge-sec-bg: #4a044e; --badge-sec-text: #f0abfc;
+      --badge-virt-bg: #7c2d12; --badge-virt-text: #fdba74;
+      --badge-gpu-bg: #3f6212; --badge-gpu-text: #bef264;
+      --badge-fpga-bg: #881337; --badge-fpga-text: #fda4af;
+      --code-bg: #161b22;
+    }
+
+    /* Base Reset & Typography */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.6;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-weight: 450;
+    }
+
+    h1, h2, h3, h4, h5, h6, nav, .filter-btn, .label, summary, .affiliations {
+      font-family: var(--font-header);
+    }
+
+    a {
+      color: var(--link-color);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    a:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(5px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 100;
+    }
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 1rem;
+      font-weight: 600;
+      flex: 1;
+      padding: 1rem 0;
+      margin-right: 1rem;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .nav-links a:hover {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover {
+      color: var(--link-color);
+      background: var(--border-color);
+    }
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Header / Profile */
+    header {
+      margin-bottom: 3rem;
+      padding-top: 1rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .affiliations {
+      color: var(--text-muted);
+      font-size: 1.2em;
+      margin-bottom: 1rem;
+    }
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 1rem;
+      font-family: var(--font-header);
+    }
+    .social-link svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 80px;
+    }
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Lists */
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+    }
+    .listings {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    .listings > li {
+      margin-bottom: 1.5rem;
+    }
+
+    .link-title {
+      color: var(--text-main);
+      text-decoration: none;
+      display: inline;
+      font-family: var(--font-header);
+    }
+    .link-title:hover {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+    .link-title:hover b {
+      text-decoration: underline;
+    }
+
+    /* Badges */
+    .label {
+      display: inline-block;
+      padding: 0.2em 0.6em;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 12px;
+      margin-right: 0.3rem;
+      margin-top: 0.5rem;
+    }
+    .label-arch { background-color: var(--badge-arch-bg); color: var(--badge-arch-text); }
+    .label-sys { background-color: var(--badge-sys-bg); color: var(--badge-sys-text); }
+    .label-storage { background-color: var(--badge-storage-bg); color: var(--badge-storage-text); }
+    .label-network { background-color: var(--badge-network-bg); color: var(--badge-network-text); }
+    .label-sec { background-color: var(--badge-sec-bg); color: var(--badge-sec-text); }
+    .label-virt { background-color: var(--badge-virt-bg); color: var(--badge-virt-text); }
+    .label-gpu { background-color: var(--badge-gpu-bg); color: var(--badge-gpu-text); }
+    .label-fpga { background-color: var(--badge-fpga-bg); color: var(--badge-fpga-text); }
+
+    /* Filters */
+    .filters {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--text-main);
+      color: var(--bg-color);
+      border-color: var(--text-main);
+    }
+
+    /* BibTeX Details */
+    details {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 500;
+      user-select: none;
+    }
+    summary:hover {
+      color: var(--link-color);
+    }
+    pre {
+      background-color: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      border: 1px solid var(--border-color);
+      font-family: monospace;
+    }
+
+    @media (max-width: 767px) {
+      body {
+        font-size: 16px;
+      }
+      h1 {
+        font-size: 2.5rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      .nav-container {
+        align-items: flex-start;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        overflow: visible;
+        white-space: normal;
+        gap: 0.25rem 1rem;
+        padding: 0.75rem 0;
+      }
+    }
+    @media (max-width: 480px) {
+      .ko-name {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="nav-container">
+      <div class="nav-links">
+        <a href="#">About</a>
+        <a href="#publications">Publications</a>
+        <a href="#education">Education</a>
+        <a href="#services">Services</a>
+        <a href="#honors">Honors</a>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Dark mode" aria-pressed="false">
+        <svg id="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg id="sun-icon" style="display: none;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <header id="about" style="scroll-margin-top: 80px;">
+      <h1 id="main-title">Junehyuk Boo <span class="ko-name">부준혁</span></h1>
+      <div class="affiliations">
+        Postdoctoral Researcher, Seoul National University (SNU)<br>
+        <!--
+        <a href="https://hpcs.snu.ac.kr">High Performance Computer System Laboratory (HPCS Lab.)</a><br>
+        <a href="http://ece.snu.ac.kr/en">Department of Electrical and Computer Engineering</a><br>
+        <a href="http://en.snu.ac.kr">Seoul National University (SNU)</a><br>
+        -->
+      </div>
+      <div class="contact-info">
+        Email: junehyuk /at/ snu.ac.kr
+      </div>
+
+      <div class="social-links">
+        <a href="https://scholar.google.com/citations?hl=en&user=MW4psvgAAAAJ" target="_blank" rel="noopener noreferrer" class="social-link">
+          <svg viewBox="0 0 24 24"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/></svg>
+          Google Scholar
+        </a>
+        <a href="https://dblp.org/pid/283/7344.html" target="_blank" rel="noopener noreferrer" class="social-link">
+          <img src="dblp.png" alt="" style="width:18px; height:18px;">
+          dblp
+        </a>
+        <a href="https://linkedin.com/in/junehyukboo" target="_blank" rel="noopener noreferrer" class="social-link">
+          <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </header>
+
+    <section id="About">
+      <h2>About</h2>
+      <p>
+        Ph.D. in Electrical and Computer Engineering specializing in computer architecture & systems, performance optimization, and hardware/software co-design.
+        Built a 100Gbps+ FPGA TCP/TLS offload system by implementing hardware IP blocks, Linux device drivers, and host software, and productionized it as a commercial DPU IP at MangoBoost.
+        Additional experience in SmartNIC telemetry, high-performance host networking, storage virtualization, and PCIe modeling.
+        Co-founder of a DPU startup, MangoBoost; multiple publications in top venues (ISCA, HPCA, OSDI, ATC).
+      </p>
+    </section>
+
+    <section id="research-interests">
+      <h2>Research Interests</h2>
+      <ul>
+        <li>Computer Architecture & Systems</li>
+        <li>Computer Networking</li>
+        <li>Storage Systems & Virtualization</li>
+        <li>Hardware/Software Co-design</li>
+        <li>SmartNIC & DPU & FPGA</li>
+      </ul>
+    </section>
+
+    <section id="publications">
+      <h2>Publications</h2>
+
+      <!--
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="arch">Architecture</button>
+        <button class="filter-btn" data-filter="sys">System</button>
+        <button class="filter-btn" data-filter="network">Network</button>
+        <button class="filter-btn" data-filter="storage">Storage</button>
+        <button class="filter-btn" data-filter="virt">Virtualization</button>
+        <button class="filter-btn" data-filter="fpga">FPGA</button>
+      </div>
+      -->
+
+      <ul class="listings">
+        <li class="pub-item arch sys network fpga">
+          <b>SPARC: SmartNIC-based Fine-grained Performance Analysis and Resource Control for Microservices</b>
+          <br>
+          <strong>Junehyuk Boo</strong>, Taehun Kim, Gyutae Kim, Joonsung Kim, and Jangwoo Kim
+          <br>
+          <em>IEEE International Symposium on High-Performance Computer Architecture</em> (<strong>HPCA</strong>), Mar. 2027 (to appear)
+          <br>
+          <span class="label label-arch">Architecture</span>
+          <span class="label label-sys">System</span>
+          <span class="label label-network">Network</span>
+          <span class="label label-fpga">FPGA</span>
+        </li>
+
+        <li class="pub-item arch sys network fpga">
+          <a href="https://dl.acm.org/doi/10.1145/3579371.3589090" target="_blank" rel="noopener noreferrer" class="link-title">
+            <b>F4T: A Fast and Flexible FPGA-based Full-stack TCP Acceleration Framework</b>
+          </a>
+          <br>
+          <strong>Junehyuk Boo</strong>, Yujin Chung, Eunjin Baek, Seongmin Na, Changsu Kim, and Jangwoo Kim
+          <br>
+          <em>ACM/IEEE International Symposium on Computer Architecture</em> (<strong>ISCA</strong>), Jun. 2023
+          <br>
+          <span class="label label-arch">Architecture</span>
+          <span class="label label-sys">System</span>
+          <span class="label label-network">Network</span>
+          <span class="label label-fpga">FPGA</span>
+          <details>
+            <summary>BibTeX</summary>
+<pre><code>@inproceedings{boo2023f4t,
+author = {Boo, Junehyuk and Chung, Yujin and Baek, Eunjin and Na, Seongmin and Kim, Changsu and Kim, Jangwoo},
+title = {F4T: A Fast and Flexible FPGA-based Full-stack TCP Acceleration Framework},
+year = {2023},
+isbn = {9798400700958},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3579371.3589090},
+doi = {10.1145/3579371.3589090},
+abstract = {As complex workloads that run on many servers are pursuing higher networking throughput, more CPU cycles are consumed to support the TCP stack. To mitigate the high CPU burden from executing the compute-intensive TCP, prior works have proposed to offload TCP processing to the embedded processors, ASICs, or FPGAs in network devices. However, none of the approaches satisfy all of the critical requirements of TCP simultaneously, which are high performance, many connections, and high flexibility. Embedded processors do not provide enough performance to fully offload the TCP stack, while ASICs fail to provide enough flexibility. Meanwhile, existing FPGA-based TCP accelerators either fail to provide high performance or give up some of the critical features and requirements to achieve high performance due to their inefficient processing architecture.This paper proposes F4T, a fast and flexible FPGA-based full-stack TCP acceleration framework to effectively save CPU cycles by achieving high performance, supporting many connections, and providing high flexibility. By analyzing the existing FPGA-based TCP accelerators, we identify that the key performance bottleneck arises from two factors: (1) inefficient processing of stateful operations that incurs stalls and (2) lack of TCP state management necessary for utilizing multiple memory modules. To resolve the identified bottlenecks, we design F4T to process stateful operations back-to-back without stalls and efficiently manage the TCP states among multiple memory modules. F4T also provides a full software-hardware stack that allows applications to easily utilize F4T without any modifications. Our evaluation results show that F4T saturates the 100Gbps link bandwidth with only two CPU cores while supporting many connections and providing high flexibility. F4T saves 64\% CPU cycles and provides 2.8\texttimes{} CPU cycles to applications compared to Linux's TCP stack when running the Nginx web server.},
+booktitle = {Proceedings of the 50th Annual International Symposium on Computer Architecture},
+articleno = {55},
+numpages = {13},
+keywords = {high performance networking, full-stack TCP acceleration, FPGA accelerator, FPGA prototyping, TCP offload engine (TOE), transmission control protocol (TCP)},
+location = {Orlando, FL, USA},
+series = {ISCA '23}
+}</code></pre>
+          </details>
+        </li>
+
+        <li class="pub-item sys storage virt fpga">
+          <a href="https://dl.acm.org/doi/10.1145/3511213" target="_blank" rel="noopener noreferrer" class="link-title">
+            <b>SmartFVM: A Fast, Flexible, and Scalable Hardware-based Virtualization for Commodity Storage Devices</b>
+          </a>
+          <br>
+          Dongup Kwon, Wonsik Lee, Dongryeong Kim, <strong>Junehyuk Boo</strong>, and Jangwoo Kim
+          <br>
+          <em>ACM Transactions on Storage</em> (<strong>TOS</strong>), Apr. 2022
+          <br>
+          <span class="label label-sys">System</span>
+          <span class="label label-storage">Storage</span>
+          <span class="label label-virt">Virtualization</span>
+          <span class="label label-fpga">FPGA</span>
+          <details>
+            <summary>BibTeX</summary>
+<pre><code>@article{kwon2022smartfvm,
+author = {Kwon, Dongup and Lee, Wonsik and Kim, Dongryeong and Boo, Junehyuk and Kim, Jangwoo},
+title = {SmartFVM: A Fast, Flexible, and Scalable Hardware-based Virtualization for Commodity Storage Devices},
+year = {2022},
+issue_date = {May 2022},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {18},
+number = {2},
+issn = {1553-3077},
+url = {https://doi.org/10.1145/3511213},
+doi = {10.1145/3511213},
+abstract = {A computational storage device incorporating a computation unit inside or near its storage unit is a highly promising technology to maximize a storage server’s performance. However, to apply such computational storage devices and take their full potential in virtualized environments, server architects must resolve a fundamental challenge: cost-effective virtualization. This critical challenge can be directly addressed by the following questions: (1) how to virtualize two different hardware units (i.e., computation and storage), and (2) how to integrate them to construct virtual computational storage devices, and (3) how to provide them to users. However, the existing methods for computational storage virtualization severely suffer from their low performance and high costs due to the lack of hardware-assisted virtualization support.In this work, we propose SmartFVM-Engine, an FPGA card designed to maximize the performance and cost-effectiveness of computational storage virtualization. SmartFVM-Engine introduces three key ideas to achieve the design goals. First, it achieves high virtualization performance by applying hardware-assisted virtualization to both computation and storage units. Second, it further improves the performance by applying hardware-assisted resource orchestration for the virtualized units. Third, it achieves high cost-effectiveness by dynamically constructing and scheduling virtual computational storage devices. To the best of our knowledge, this is the first work to implement a hardware-assisted virtualization mechanism for modern computational storage devices.},
+journal = {ACM Trans. Storage},
+month = apr,
+articleno = {12},
+numpages = {27},
+keywords = {Computational storage}
+}</code></pre>
+          </details>
+        </li>
+
+        <li class="pub-item sys storage virt fpga">
+          <a href="https://www.usenix.org/conference/atc21/presentation/kwon" target="_blank" rel="noopener noreferrer" class="link-title">
+            <b>A Fast and Flexible Hardware-based Virtualization Mechanism for Computational Storage Devices</b>
+          </a>
+          <br>
+          Dongup Kwon, Dongryeong Kim, <strong>Junehyuk Boo</strong>, Wonsik Lee, and Jangwoo Kim
+          <br>
+          <em>USENIX Annual Technical Conference</em> (<strong>ATC</strong>), Jul. 2021
+          <br>
+          <span class="label label-sys">System</span>
+          <span class="label label-storage">Storage</span>
+          <span class="label label-virt">Virtualization</span>
+          <span class="label label-fpga">FPGA</span>
+          <details>
+            <summary>BibTeX</summary>
+<pre><code>@inproceedings{kwon2021flexcsv,
+author = {Dongup Kwon and Dongryeong Kim and Junehyuk Boo and Wonsik Lee and Jangwoo Kim},
+title = {A Fast and Flexible Hardware-based Virtualization Mechanism for Computational Storage Devices},
+booktitle = {2021 USENIX Annual Technical Conference (USENIX ATC 21)},
+year = {2021},
+isbn = {978-1-939133-23-6},
+pages = {729--743},
+url = {https://www.usenix.org/conference/atc21/presentation/kwon},
+publisher = {USENIX Association},
+month = jul
+}</code></pre>
+          </details>
+        </li>
+
+        <li class="pub-item sys storage virt fpga">
+          <a href="https://www.usenix.org/conference/osdi20/presentation/kwon" target="_blank" rel="noopener noreferrer" class="link-title">
+            <b>FVM: FPGA-assisted Virtual Device Emulation for Fast, Scalable, and Flexible Storage Virtualization</b>
+          </a>
+          <br>
+          Dongup Kwon, <strong>Junehyuk Boo</strong>, Dongryeong Kim, and Jangwoo Kim
+          <br>
+          <em>USENIX Symposium on Operating Systems Design and Implementation</em> (<strong>OSDI</strong>), Nov. 2020
+          <br>
+          <span class="label label-sys">System</span>
+          <span class="label label-storage">Storage</span>
+          <span class="label label-virt">Virtualization</span>
+          <span class="label label-fpga">FPGA</span>
+          <details>
+            <summary>BibTeX</summary>
+<pre><code>@inproceedings{kwon2020fvm,
+author = {Dongup Kwon and Junehyuk Boo and Dongryeong Kim and Jangwoo Kim},
+title = {FVM: FPGA-assisted Virtual Device Emulation for Fast, Scalable, and Flexible Storage Virtualization},
+booktitle = {14th USENIX Symposium on Operating Systems Design and Implementation (OSDI 20)},
+year = {2020},
+isbn = {978-1-939133-19-9},
+pages = {955--971},
+url = {https://www.usenix.org/conference/osdi20/presentation/kwon},
+publisher = {USENIX Association},
+month = nov
+}</code></pre>
+          </details>
+        </li>
+
+        <li class="pub-item patent">
+          <b>Named inventor of 5 U.S. patent applications</b>, 2024
+          <details>
+            <summary>List</summary>
+            <ul>
+              <li><b>[Granted]</b> TOE-based Network Interface Device Including Memory Hierarchy Structure and Operation Method Thereof</li>
+              <li><b>[Granted]</b> Toe-based network interface device, server device and operating method of server device capable of enhancing data processing efficiency</li>
+              <li><b>[Published]</b> Toe-based network interface device capable of asynchronous performing tcp event handling and tcp operation processing, operation method thereof, and server device including the same</li>
+              <li><b>[Published]</b> Toe-based network interface device capable of enhancing data processing efficiency, operating method thereof, and server device including the same</li>
+              <li><b>[Published]</b> Toe-based network interface device, method of operating the same, and server device including the same</li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <section id="education">
+      <h2>Education and Experience</h2>
+      <ul class="listings">
+        <li>
+          <b>Seoul National University (SNU)</b>, Seoul, South Korea
+          <ul>
+            <li>Senior Researcher (Postdoctoral), Automation and Systems Research Institute (ASRI)</li>
+            <li>Mar. 2026 &ndash; Present</li>
+          </ul>
+        </li>
+        <li>
+          <b>MangoBoost</b>, Seoul, South Korea
+          <ul>
+            <li>System Architect & Co-founder</li>
+            <li>Jan. 2022 &ndash; Feb. 2024</li>
+          </ul>
+        </li>
+        <li>
+          <b>Seoul National University (SNU)</b>, Seoul, South Korea
+          <ul>
+            <li>Ph.D. in Electrical and Computer Engineering</li>
+            <li>Advisor: Prof. Jangwoo Kim</li>
+            <li>Mar. 2020 &ndash; Feb. 2026</li>
+          </ul>
+        </li>
+        <li>
+          <b>Seoul National University (SNU)</b>, Seoul, South Korea
+          <ul>
+            <li>B.S. in Electrical and Computer Engineering</li>
+            <li>Summa Cum Laude</li>
+            <li>Mar. 2016 &ndash; Feb. 2020</li>
+          </ul>
+        </li>
+        <li>
+          <b>Korea Science Academy of KAIST (KSA)</b>, Busan, South Korea
+          <ul>
+            <li>Mar. 2013 &ndash; Feb. 2016</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section id="services">
+      <h2>Academic Services</h2>
+      <ul class="listings">
+        <li>
+        <b>2026</b>
+          <ul>
+            <li>
+              ACM Transactions on Architecture and Code Optimization (TACO)
+            </li>
+            <li>
+              ACM Transactions on Computer Systems (TOCS)
+            </li>
+            <li>
+              ACM Transactions on Embedded Computing Systems (TECS)
+            </li>
+            <li>
+              IEEE Computer Architecture Letters (CAL)
+            </li>
+            <li>
+              IEEE Transactions on Computers (TC)
+            </li>
+          </ul>
+        </li>
+        <li>
+        <b>2023</b>
+          <ul>
+            <li>
+              Elsevier Journal of Network and Computer Applications (JNCA)
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section id="honors">
+      <h2>Honors and Awards</h2>
+      <ul class="listings">
+        <li><b>Korea Foundation for Advanced Studies (KFAS) Graduate Student Scholarship</b>
+          <ul>
+            <li>2020 &ndash; 2025</li>
+          </ul>
+        </li>
+        <li><b>Kwanjeong Educational Foundation (KEF) Undergraduate Scholarship</b>
+          <ul>
+            <li>2018 &ndash; 2019</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const themeToggle = document.getElementById('theme-toggle');
+      const moonIcon = document.getElementById('moon-icon');
+      const sunIcon = document.getElementById('sun-icon');
+      const body = document.body;
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+      const currentTheme = localStorage.getItem('theme');
+      const setTheme = (isDark) => {
+        body.classList.toggle('dark-mode', isDark);
+        themeToggle.setAttribute('aria-pressed', String(isDark));
+        moonIcon.style.display = isDark ? 'none' : 'block';
+        sunIcon.style.display = isDark ? 'block' : 'none';
+      };
+
+      setTheme(currentTheme === 'dark');
+      //setTheme(currentTheme === null ? systemTheme.matches : currentTheme === 'dark');
+
+      systemTheme.addEventListener('change', (event) => {
+        if (localStorage.getItem('theme') === null) {
+          setTheme(event.matches);
+        }
+      });
+
+      themeToggle.addEventListener('click', () => {
+        const isDark = !body.classList.contains('dark-mode');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        setTheme(isDark);
+      });
+
+      document.querySelectorAll('.nav-links a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const targetId = this.getAttribute('href');
+
+          // Check if it's an internal link
+          if (targetId.startsWith('#')) {
+            e.preventDefault();
+
+            const targetElement = (targetId === '#') ? document.body : document.querySelector(targetId);
+            if (targetElement) {
+              targetElement.scrollIntoView({
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
